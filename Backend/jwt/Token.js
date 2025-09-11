@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 // Access Token Generate
 const generateAccessToken = payload => {
   return jwt.sign(payload, process.env.ACCESS_KEY, { expiresIn: '15m' });
