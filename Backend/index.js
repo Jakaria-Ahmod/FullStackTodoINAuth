@@ -6,11 +6,13 @@ const route = require('./routes');
 const DBCONNECT = require('./config/databaseConnect');
 const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 5050;
+const morgan = require('morgan');
 
 // midleware
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan('dev'));
 app.use(route);
 
 // invalid route

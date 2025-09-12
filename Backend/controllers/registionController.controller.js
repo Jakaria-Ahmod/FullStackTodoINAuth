@@ -152,7 +152,7 @@ const loginControlller = async (req, res) => {
 
 const refreshController = async (req, res) => {
   try {
-    const token = req.cookies.refreshToken; // ✅ ঠিক করা হলো
+    const token = req.cookies.refreshToken; //
     if (!token) {
       return res.status(400).json({ message: 'Refresh token not provided' });
     }
@@ -163,7 +163,7 @@ const refreshController = async (req, res) => {
         return res.status(403).json({ message: 'Invalid refresh token' });
       }
 
-      // ✅ নতুন Access Token বানাও
+      // accesstoken
       const accessToken = generateAccessToken({ id: decoded.id });
 
       return res.status(200).json({
@@ -179,9 +179,97 @@ const refreshController = async (req, res) => {
   }
 };
 
+const resetPasswordController = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return res.status(400).json({ message: 'token no provide' });
+    }
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({ message: 'all feaild required' });
+    }
+
+    const decode = jwt.verify(token, process.env.ACCESS_KEY);
+
+    const userExit = await User.findById(decode.id);
+
+    if (!userExit) {
+      return res.status(400).json({ message: 'user not found ' });
+    }
+
+    userExit.password = await bcrypt.hash(password, 10);
+    userExit.save();
+
+    res.status(403).json({ message: 'password reset successfully' });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const forgetPasswordController = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'pliese All feaild required' });
+    }
+    if (!validateEmail(email)) {
+      return res
+        .status(400)
+        .json({ message: `plise enter your correct email` });
+    }
+
+    const userExit = await User.findOne({ email });
+    if (!userExit) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    const resetToken = generateAccessToken({ id: userExit.id });
+
+    const resetLink = `${process.env.CLINT_URL}/reset-password/${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Gmail
+      auth: {
+        user: process.env.MY_EMAIL, // you mail
+        pass: process.env.MY_APP_PASSWORD, // App Password
+      },
+    });
+
+    // Mail options
+    const mailOptions = {
+      from: process.env.MY_EMAIL,
+      to: ` ${userExit.email}`,
+      subject: 'reset password',
+      html: `<h3>Please reset password: <a href="${resetLink}">Click Here</a></h3>`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log('Error:', error);
+      }
+      console.log('Email sent:', info.response);
+    });
+
+    res.status(200).json({ message: 'plise check your email' });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   registionController,
   loginControlller,
   verifyEmailController,
   refreshController,
+  resetPasswordController,
+  forgetPasswordController,
 };
