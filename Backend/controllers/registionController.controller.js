@@ -88,8 +88,6 @@ const verifyEmailController = async (req, res) => {
       res.status(400).json({ message: 'user not exit plise try agin' });
     }
 
-    console.log(userExit);
-
     userExit.isVerified = true;
     await userExit.save();
 
@@ -265,6 +263,17 @@ const forgetPasswordController = async (req, res) => {
   }
 };
 
+const allUserController = async (req, res) => {
+  try {
+    const allUser = await User.find();
+    res
+      .status(203)
+      .json({ message: 'get all User sucessfully', allUser: allUser });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registionController,
   loginControlller,
@@ -272,4 +281,5 @@ module.exports = {
   refreshController,
   resetPasswordController,
   forgetPasswordController,
+  allUserController,
 };

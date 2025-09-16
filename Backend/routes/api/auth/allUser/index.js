@@ -1,9 +1,7 @@
 const {
-  verifyEmailController,
+  allUserController,
 } = require('../../../../controllers/registionController.controller');
 
 const router = require('express').Router();
-
-router.get('/:token', verifyEmailController);
-
+router.get('/', allUserController);
 module.exports = router;

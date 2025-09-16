@@ -1,36 +1,29 @@
 import { useState } from 'react';
-import { useCreateUserMutation } from '../service/api';
+import { useNavigate } from 'react-router';
+import { useLoginUserMutation } from '../service/api';
 
-function Register() {
-  const [createUser, { isLoading, isError, isSuccess }] =
-    useCreateUserMutation();
-
+const Login = () => {
+  const [loginUser, { isLoading, isSuccess, isError }] = useLoginUserMutation();
   const [formData, setFormData] = useState({
-    fullName: '',
     email: '',
     password: '',
-    dateOfBrith: '',
   });
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const naviget = useNavigate();
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await createUser(formData).unwrap();
-      console.log('User Registered:', res);
-      setFormData({
-        fullName: '',
-        email: '',
-        password: '',
-        dateOfBrith: '',
-      });
-      // alert('Registration Successful ✅');
+      const res = await loginUser(formData).unwrap();
+      console.log('User Login:', res.message);
+      naviget('/welcome');
+      alert('Login Successful ✅');
     } catch (error) {
-      console.error('Registration Failed:', error);
-      alert('Registration Failed ❌');
+      console.error('Login Failed:', error);
+      alert('Login Failed ❌');
     }
   };
 
@@ -38,19 +31,9 @@ function Register() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-indigo-600 mb-6">
-          Register
+          Login
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
           <input
             type="email"
             name="email"
@@ -66,16 +49,6 @@ function Register() {
             name="password"
             placeholder="Password"
             value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
-            type="text"
-            name="dateOfBrith"
-            placeholder="Date of Birth"
-            value={formData.dateOfBrith}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -107,6 +80,6 @@ function Register() {
       </div>
     </div>
   );
-}
+};
 
-export default Register;
+export default Login;

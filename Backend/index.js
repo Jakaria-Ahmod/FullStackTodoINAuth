@@ -11,7 +11,7 @@ const morgan = require('morgan');
 // midleware
 app.use(
   cors({
-    origin: 'http://localhost:5174', // / মুছে দাও
+    origin: 'http://localhost:5173', // / মুছে দাও
     credentials: true,
   })
 );

@@ -1,15 +1,11 @@
 import { useState } from 'react';
-import { useCreateUserMutation } from '../service/api';
+import { useForgetPasswordMutation } from '../service/api';
 
-function Register() {
-  const [createUser, { isLoading, isError, isSuccess }] =
-    useCreateUserMutation();
-
+const ResetPassword = () => {
+  const [forgetPassword, { isLoading, isError, isSuccess }] =
+    useForgetPasswordMutation();
   const [formData, setFormData] = useState({
-    fullName: '',
     email: '',
-    password: '',
-    dateOfBrith: '',
   });
 
   const handleChange = e => {
@@ -19,18 +15,12 @@ function Register() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await createUser(formData).unwrap();
-      console.log('User Registered:', res);
-      setFormData({
-        fullName: '',
-        email: '',
-        password: '',
-        dateOfBrith: '',
-      });
-      // alert('Registration Successful ✅');
+      const res = await forgetPassword(formData).unwrap();
+      console.log('forgetPassword password:', res);
+      alert('check your email ✅');
     } catch (error) {
-      console.error('Registration Failed:', error);
-      alert('Registration Failed ❌');
+      console.error('forgetPassword Failed:', error);
+      alert('forgetPassword Failed ❌');
     }
   };
 
@@ -42,40 +32,10 @@ function Register() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
-            type="text"
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
             type="email"
             name="email"
             placeholder="Email Address"
             value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
-            type="text"
-            name="dateOfBrith"
-            placeholder="Date of Birth"
-            value={formData.dateOfBrith}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -107,6 +67,6 @@ function Register() {
       </div>
     </div>
   );
-}
+};
 
-export default Register;
+export default ResetPassword;
