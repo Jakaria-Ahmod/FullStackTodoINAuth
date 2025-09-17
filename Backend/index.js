@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
+// const TodosRoutes = require('./routes/api/Todos');
 const route = require('./routes');
 const DBCONNECT = require('./config/databaseConnect');
 const cookieParser = require('cookie-parser');
@@ -20,6 +21,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(route);
+app.use('/uploads', express.static('uploads'));
+// app.use(TodosRoutes);
 
 // invalid route
 app.use((req, res) => {
