@@ -25,12 +25,12 @@ app.use('/uploads', express.static('uploads'));
 // app.use(TodosRoutes);
 
 // invalid route
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'invalid routes pliese check your correct routes',
-  });
-});
+// app.use((req, res) => {
+//   res.status(404).json({
+//     success: false,
+//     message: 'invalid routes pliese check your correct routes',
+//   });
+// });
 
 // app listen
 app.listen(PORT, () => {

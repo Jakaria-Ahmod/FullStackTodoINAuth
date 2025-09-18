@@ -7,6 +7,10 @@ const resetPassword = require('./auth/resetPassword');
 const forgetPassword = require('./auth/forgetPassword');
 const allUser = require('./auth/allUser');
 const createTodo = require('./auth/Todos/createTods');
+const updateTodo = require('./auth/Todos/uapdateTodo');
+const getAllTodo = require('./auth/Todos/getAllTodo');
+const deletTodo = require('./auth/Todos/deleteTodo');
+const sigleTodo = require('./auth/Todos/singleTodo');
 const authMiddleware = require('../../jwt/AuthMeddaleWare');
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -29,5 +33,9 @@ router.use('/reset-password', resetPassword);
 router.use('/forget-password', forgetPassword);
 router.use('/allUser', allUser);
 router.use('/createTodo', authMiddleware, upload.single('file'), createTodo);
+router.use('/updateTodo', authMiddleware, upload.single('file'), updateTodo);
+router.use('/getAllTodo', authMiddleware, getAllTodo);
+router.use('/deletTodo', authMiddleware, deletTodo);
+router.use('/singleTodo', authMiddleware, sigleTodo);
 
 module.exports = router;
