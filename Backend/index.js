@@ -7,7 +7,28 @@ const route = require('./routes');
 const DBCONNECT = require('./config/databaseConnect');
 const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 5050;
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 const morgan = require('morgan');
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Backend API Documentation',
+      version: '1.0.0',
+      description: 'API documentation using Swagger for Backend Project',
+    },
+    servers: [
+      {
+        url: 'http://localhost:8080/api/v1', // তোমার সার্ভারের base URL
+      },
+    ],
+  },
+  apis: ['./routes/api/*.js'], // Route ফাইল গুলোতে JSDoc comments খুঁজবে
+};
+
+const specs = swaggerJsDoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // midleware
 app.use(
@@ -23,14 +44,6 @@ app.use(morgan('dev'));
 app.use(route);
 app.use('/uploads', express.static('uploads'));
 // app.use(TodosRoutes);
-
-// invalid route
-// app.use((req, res) => {
-//   res.status(404).json({
-//     success: false,
-//     message: 'invalid routes pliese check your correct routes',
-//   });
-// });
 
 // app listen
 app.listen(PORT, () => {

@@ -13,6 +13,7 @@ const deletTodo = require('./auth/Todos/deleteTodo');
 const sigleTodo = require('./auth/Todos/singleTodo');
 const authMiddleware = require('../../jwt/AuthMeddaleWare');
 const multer = require('multer');
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads');
@@ -25,6 +26,73 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+/**
+ * @swagger
+ * /registion:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *                 example: Jakaria
+ *               email:
+ *                 type: string
+ *                 example: jakaria@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: 123456
+ *               dateOfBrith:
+ *                 type: string
+ *                 example: 123456
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: jakaria@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: 123456
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       400:
+ *         description: Invalid credentials
+ */
 router.use('/registion', registion);
 router.use('/login', login);
 router.use('/verify', verifyEmail);
